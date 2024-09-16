@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./icon.svg" type="image/x-icon">
+    <title>Loginpage</title>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="main">
+    <img src="./icon.svg" id="icon">
+    <h1>PATTERNFLY</h1>
+    </div>
+    <div class="placeholder">Lorem ipsum dolor sit amet consectetur adipisicing elit. </div>
+    <div class="form">
+        <div class="dropdown">
+            <button class="dropdown_button">English</button>
+            <div class="dropdown_content">
+                <a href="#">Hindi</a>
+                <a href="#">English</a>
+                
+            </div>
+        </div>
+        <form id="loginForm">
+            <p class="intro">Log in to your Account</p>
+            <input placeholder="Enter a phone or username" id="username">
+            <input type="password" placeholder="Password" id="password">
+            <input type="checkbox" id="checkbox">
+            <label for="checkbox" id="label">Keep me logged in for 30 days</label>
+            <a href="#" class="forgot">Forgot password?</a>
+            <button type="submit" id="login">Log In</button>
+            <p id="signup_intro">Need an account?</p>
+            <a href="signup.html" id="signup_button">Sign up</a>
+        </form>
+    </div>
+    <div class="list">
+        <ul>
+            <li><a href="#">Terms of Use .</a></li>
+            <li> <a href="#">Help .</a></li>
+            <li> <a href="#">Privacy Policy</a></li>
+        </ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
