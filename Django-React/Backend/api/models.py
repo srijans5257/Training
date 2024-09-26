@@ -1,0 +1,81 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+# Create your models here.
+class Project(models.Model):
+    name=models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+    
+class Note(models.Model):
+    PENDING = 'pending'
+    ACCEPTED = 'accepted'
+    REJECTED = 'rejected'
+    
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (ACCEPTED, 'Accepted'),
+        (REJECTED, 'Rejected'),
+    ]
+
+    reason=models.CharField(max_length=100)
+    description=models.TextField()
+    created_at=models.DateField(auto_now_add=True)
+    from_date=models.DateField(default=created_at)
+    to_date=models.DateField(default=created_at)
+    author=models.ForeignKey(User,on_delete=models.CASCADE,related_name="notes")
+    status = models.CharField(
+        max_length=10, 
+        choices=STATUS_CHOICES, 
+        default=PENDING  # Default status is 'pending'
+    )
+
+    def __str__(self) -> str:
+        return self.reason
+
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('manager', 'Manager'),
+        ('employee', 'Employee'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
+
+class Task(models.Model):
+    PENDING = 'pending'
+    ACCEPTED = 'accepted'
+    REJECTED = 'rejected'
+    
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (ACCEPTED, 'Accepted'),
+        (REJECTED, 'Rejected'),
+    ]
+    note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='tasks')
+    tasks_completed = models.TextField()
+    hours_requested=models.CharField(max_length=255)
+    status = models.CharField(
+        max_length=10, 
+        choices=STATUS_CHOICES, 
+        default=PENDING  # Default status is 'pending'
+    )
+    def __str__(self):
+        return f"Task for Note: {self.note.reason}"
+
+class Notifications(models.Model):
+    STATUS_CHOICES = [
+        ('Read', 'Read'),
+        ('Unread', 'Unread'),
+    ]
+    project=models.ForeignKey(Project,on_delete=models.SET_NULL,null=True, blank=True)
+    to=models.CharField(max_length=255)
+    from_manager=models.CharField(max_length=255)
+    status=models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='Read'
+    )
+    message=models.CharField(max_length=255,default="xyz")
