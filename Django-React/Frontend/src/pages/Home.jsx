@@ -134,7 +134,7 @@ function Home() {
   }
   return (
     <Box bg="black">
-      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky" top="0">
+      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky" top="0" zIndex="2000">
       <SidebarHome isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
         onApplicationsClick={onApplicationsClick}
         onApplicationCreationClick={onApplicationsCreationClick}/>

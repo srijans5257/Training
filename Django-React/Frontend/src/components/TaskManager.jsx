@@ -14,7 +14,7 @@ function TaskManager({task,onStatusChange,onHoursChange}) {
     <div className='note-container'>
       <p>Author: {task.author}</p>
       <p>Tasks Completed: {task.tasks_completed}</p>
-      
+      <p>Date: {task.date}</p>
       <p>
             {task.status === "pending" ? (
                     // If the status is pending, render a dropdown

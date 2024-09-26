@@ -66,29 +66,26 @@ class NoteDelete(generics.DestroyAPIView):
 class TaskCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
-
+    
     def get_queryset(self):
+        selected_date = self.kwargs['date']
         note_id = self.kwargs['note_id']
-        return Task.objects.filter(note_id=note_id)
+        return Task.objects.filter(note_id=note_id,date=selected_date)
 
     def perform_create(self, serializer):
         note_id = self.kwargs['note_id']
+        selected_date=self.kwargs['date']
         note = Note.objects.get(id=note_id)
-        serializer.save(note=note)
+        serializer.save(note=note,date=selected_date)
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes=[IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        try:
-            task = self.get_object()
-            serializer = TaskSerializer(task)
-            return Response(serializer.data)
-        except Task.DoesNotExist:
-            return Response({"error": "Task not found."}, status=status.HTTP_404_NOT_FOUND)
+    def get_object(self):
+        task_id = self.kwargs['pk']
+        return Task.objects.get(id=task_id)
 
     def put(self, request, *args, **kwargs):
         task = self.get_object()

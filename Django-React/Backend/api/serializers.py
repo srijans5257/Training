@@ -55,12 +55,12 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model=Task
-        fields=['id','tasks_completed','hours_requested','status']
+        fields=['id','tasks_completed','hours_requested','status','date']
 class TaskViewSerializer(serializers.ModelSerializer):
     author=serializers.CharField(source='note.author.username')
     class Meta:
         model=Task
-        fields=['id','tasks_completed','hours_requested','status','author']
+        fields=['id','tasks_completed','hours_requested','status','author','date']
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     project_name = serializers.CharField(source='project.name', read_only=True)

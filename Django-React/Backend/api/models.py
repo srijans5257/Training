@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 # Create your models here.
 class Project(models.Model):
     name=models.CharField(max_length=100)
@@ -62,8 +63,13 @@ class Task(models.Model):
         choices=STATUS_CHOICES, 
         default=PENDING  # Default status is 'pending'
     )
+    date = models.DateField(null=True,blank=True)
+
+    def clean(self):
+        if self.date < self.note.from_date or self.date > self.note.to_date:
+            raise ValidationError('Date must be between the note\'s from_date and to_date.')
     def __str__(self):
-        return f"Task for Note: {self.note.reason}"
+        return f"Task for Note: {self.note.reason} for {self.date}"
 
 class Notifications(models.Model):
     STATUS_CHOICES = [
