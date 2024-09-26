@@ -58,7 +58,18 @@ function Form({ route, method }) {
                         isClosable: true,
                       })
                     navigate("/managerdashboard");
-                } else {
+                }
+                else if (userRole === "Admin") {
+                    toast({
+                        title: 'Login Successful',
+                        // description: "We've created your account for you.",
+                        status: 'success',
+                        duration: 9000,
+                        isClosable: true,
+                      })
+                    navigate("/admindashboard");
+                }
+                else {
                     toast({
                         title: 'Login Successful',
                         // description: "We've created your account for you.",
@@ -113,6 +124,7 @@ function Form({ route, method }) {
                     <option value="">Select Role</option>
                     <option value="manager">Manager</option>
                     <option value="employee">Employee</option>
+                    <option value="Admin">Admin</option>
                 </Select>
             )}
             <br/>

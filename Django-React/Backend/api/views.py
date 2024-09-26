@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from .models import Note,Project,Profile,Task,Notifications
 from rest_framework import status
 from rest_framework.response import Response
+from django.db.models import Q
 # Create your views here.
 
 class NoteListCreate(generics.ListCreateAPIView):
@@ -151,6 +152,15 @@ class ProfileManagerView(generics.ListAPIView):
         user=self.request.user
         project=user.profile.project
         return Profile.objects.filter(project=project).filter(role="employee")
+
+class ProfileAdminView(generics.ListAPIView):
+    serializer_class=ProfileSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        user=self.request.user
+        project=user.profile.project
+        return Profile.objects.filter(project=project).filter(Q(role="employee") | Q(role="manager"))
 
 class roleChangeView(generics.UpdateAPIView):
     queryset = Profile.objects.all()

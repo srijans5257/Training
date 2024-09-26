@@ -11,6 +11,7 @@ urlpatterns=[
     path('profile/<str:username>/', views.UserProfileView2.as_view(), name='user-profile'),
     path('tasks/',views.TaskView.as_view(),name='TaskView'),
     path('get/allprofiles/',views.ProfileManagerView.as_view(),name="getallprofiles"),
+    path('get/allprofilesadmin/',views.ProfileAdminView.as_view(),name="getallprofiles"),
     path('update/role/<str:username>/',views.roleChangeView.as_view(),name="change-role"),
     path('get/notificationsemployee/',views.NotificationEmployeeView.as_view(),name="notification-employee"),
     path('get/notificationsmanager/',views.NotificationManagerView.as_view(),name="notification-manager"),

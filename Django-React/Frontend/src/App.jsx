@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Home from "./pages/Home"
 import ManagerDashboard from "./pages/ManagerDashboard"
+import AdminDashboard from "./pages/AdminDashboard"
 import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
 import WfhTaskAddition from "./pages/WfhTaskAddition"
@@ -39,6 +40,12 @@ function App() {
           <Route path="/managerdashboard" element={
             <ProtectedRoute>
               <ManagerDashboard />
+            </ProtectedRoute>
+            
+          }/>
+          <Route path="/admindashboard" element={
+            <ProtectedRoute>
+              <AdminDashboard />
             </ProtectedRoute>
             
           }/>

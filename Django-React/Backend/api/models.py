@@ -38,6 +38,7 @@ class Profile(models.Model):
     ROLE_CHOICES = [
         ('manager', 'Manager'),
         ('employee', 'Employee'),
+        ('admin','Admin'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
@@ -57,7 +58,7 @@ class Task(models.Model):
     ]
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='tasks')
     tasks_completed = models.TextField()
-    hours_requested=models.CharField(max_length=255)
+    hours_requested=models.CharField(max_length=255, null=True,blank=True)
     status = models.CharField(
         max_length=10, 
         choices=STATUS_CHOICES, 
