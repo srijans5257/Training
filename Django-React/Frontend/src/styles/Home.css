@@ -41,7 +41,7 @@ div {
   
   /* Styles for the form section */
   form {
-    background-color: #7D98A1;
+    background-color: #203053;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -56,7 +56,7 @@ div {
   }
   
   form label {
-    color: black;
+    color: white;
     font-weight: bold;
     margin-top: 10px;
   }
@@ -69,12 +69,13 @@ div {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: aliceblue
+    background-color: aliceblue;
+    color: black;
   }
   
   form input[type="submit"] {
     background-color: #007bff;
-    color: white;
+    color: black;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;

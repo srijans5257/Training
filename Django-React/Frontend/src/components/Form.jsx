@@ -99,13 +99,16 @@ function Form({ route, method }) {
 
     return (
         <form onSubmit={handleSubmit} className="form-container">
-            <Heading>{name}</Heading>
+            <Heading color="#ffffff">{name}</Heading>
             <Input
                 className="form-input"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Username"
+                bg="#f5f5f5"
+                color="black"
+                _placeholder={{color:"black"}}
             />
             <Input
                 className="form-input"
@@ -113,43 +116,51 @@ function Form({ route, method }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                bg="#f5f5f5"
+                color="black"
+                _placeholder={{color:"black"}}
             />
             <br/>
             {method === "register" && (
-                <Select
-                    className="form-input"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)} 
-                >
-                    <option value="">Select Role</option>
-                    <option value="manager">Manager</option>
-                    <option value="employee">Employee</option>
-                    <option value="Admin">Admin</option>
-                </Select>
-            )}
-            <br/>
-            {method === "register" && (
-                <Select
-                size="md"
-                    className="form-input"
-                    value={project}
-                    onChange={(e) => setProject(e.target.value)} 
-                >
-                    <option value="">Select Project</option>  
-                    {projects.length > 0 ? (  
-                        projects.map((proj) => (
-                            <option key={proj.id} value={proj.id}>
-                                {proj.name}
-                            </option>
-                        ))
-                    ) : (
-                        <option value="" disabled>No Projects Available</option> 
-                    )}
-                </Select>
+                <>
+                    <Select
+                        className="form-input"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)} 
+                        bg="#f5f5f5"
+                        color="black"
+                    >
+                        <option value="">Select Role</option>
+                        <option value="manager">Manager</option>
+                        <option value="employee">Employee</option>
+                        <option value="Admin">Admin</option>
+                    </Select>
+                    <br/>
+                    <Select
+                    size="md"
+                        className="form-input"
+                        value={project}
+                        onChange={(e) => setProject(e.target.value)} 
+                        bg="#f5f5f5"
+                        color="black"
+                        marginTop="20px"
+                    >
+                        <option value="">Select Project</option>  
+                        {projects.length > 0 ? (  
+                            projects.map((proj) => (
+                                <option key={proj.id} value={proj.id}>
+                                    {proj.name}
+                                </option>
+                            ))
+                        ) : (
+                            <option value="" disabled>No Projects Available</option> 
+                        )}
+                    </Select>
+                </>
             )}
             <br/>
             {loading && <LoadingIndicator />}
-            <Button className="form-button" type="submit">
+            <Button className="form-button" type="submit" bg="#568bf1" color="#f5f5f5">
                 {name}
             </Button>
         </form>

@@ -3,7 +3,9 @@ from . import views
 
 urlpatterns=[
     path("notes/",views.NoteListCreate.as_view(),name="note-list"),
-    path("notes_manager/",views.NoteListCreateManager.as_view(),name="note-list-manager"),
+    path("notes_manager_pending/",views.NoteListCreateManagerPending.as_view(),name="note-list-manager"),
+    path("notes_manager_accepted/",views.NoteListCreateManagerAccepted.as_view(),name="note-list-manager"),
+    path("notes_manager_rejected/",views.NoteListCreateManagerRejected.as_view(),name="note-list-manager"),
     path("notes/delete/<int:pk>/",views.NoteDelete.as_view(),name="delete-note"),
     path("notes/<int:pk>/",views.NoteStatusUpdate.as_view(),name="update-note-status"),
     path("taskaddition/<int:note_id>/<str:date>/",views.TaskCreateView.as_view(),name="task-addition"),

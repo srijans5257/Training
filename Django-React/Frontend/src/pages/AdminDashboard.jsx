@@ -22,6 +22,12 @@ function ManagerDashboard() {
     const [viewEmployees, setViewEmployees]=useState(false);
     const [notif,setNotif]=useState([]);
     const [err,setError]=useState("");
+    const [viewAcceptedApplications, setViewAcceptedApplications]=useState(false);
+    const [viewRejectedApplications, setViewRejectedApplications]=useState(false);
+    const [viewPendingApplications, setViewPendingApplications]=useState(true);
+    const [notesPending, setNotesPending] = useState([]);
+    const [notesAccepted, setNotesAccepted] = useState([]);
+    const [notesRejected, setNotesRejected] = useState([]);
     function Logout(){
         localStorage.clear()
         navigate("/login")
@@ -37,6 +43,21 @@ function ManagerDashboard() {
         })
         .catch((err)=>alert(err));
     }
+    const onAcceptedClick=()=>{
+        setViewAcceptedApplications(true);
+        setViewPendingApplications(false);
+        setViewRejectedApplications(false);
+      }
+      const onRejectedClick=()=>{
+        setViewAcceptedApplications(false);
+        setViewPendingApplications(false);
+        setViewRejectedApplications(true);
+      }
+      const onPendingClick=()=>{
+        setViewAcceptedApplications(false);
+        setViewPendingApplications(true);
+        setViewRejectedApplications(false);
+      }
     const onDashboardClick=()=>{
       setViewDashboard(true);
       setViewApplications(false);
@@ -70,13 +91,33 @@ function ManagerDashboard() {
             })
             .catch((err) => alert(err));
     };
-    const getNotes = () => {
+    const getNotesPending = () => {
         
         api
-            .get("/api/notes_manager/")
+            .get("/api/notes_manager_pending/")
             .then((res) => res.data)
             .then((data) => {
-                setNotes(data);
+                setNotesPending(data);
+                console.log(data);
+            })
+            .catch((err) => alert(err));
+    };
+    const getNotesAccepted = () => {
+        api
+            .get("/api/notes_manager_accepted/")
+            .then((res) => res.data)
+            .then((data) => {
+                setNotesAccepted(data);
+                console.log(data);
+            })
+            .catch((err) => alert(err));
+    };
+  const getNotesRejected = () => {
+        api
+            .get("/api/notes_manager_rejected/")
+            .then((res) => res.data)
+            .then((data) => {
+                setNotesRejected(data);
                 console.log(data);
             })
             .catch((err) => alert(err));
@@ -155,7 +196,9 @@ function ManagerDashboard() {
       });
     }
     useEffect(() => {
-        getNotes();
+        getNotesPending();
+        getNotesAccepted();
+        getNotesRejected();
         getTasks();
         getProfiles();
         getNotifications();
@@ -270,7 +313,7 @@ function ManagerDashboard() {
         </ModalContent>
       </Modal>
   {viewDashboard && (
-    <Box bg="Black">
+    <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
       <Flex
       alignItems="center"
       justifyContent="center"
@@ -290,23 +333,42 @@ function ManagerDashboard() {
     </Box>
   )}
 
-     {viewApplications&& <Box bg="black" h="100vh">
-        <Heading color="white">Applications</Heading>
-        {notes.map((note) => (
+{viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
+          <Heading color="white">Applications</Heading>
+        </Box>
+        <Box display="flex" justifyContent="center" marginTop="10px">
+          <Button marginRight="20px" onClick={onAcceptedClick}>Accepted</Button>
+          <Button marginRight="20px" onClick={onRejectedClick}>Rejected</Button>
+          <Button onClick={onPendingClick} zIndex="0" >Pending</Button>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
+        {viewPendingApplications && notesPending.map((note) => (
             <NoteAdmin note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
+        {viewAcceptedApplications && notesAccepted.map((note) => (
+            <NoteAdmin note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
+        ))}
+        {viewRejectedApplications && notesRejected.map((note) => (
+            <NoteAdmin note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
+        ))}
+        </Box>
+        
     </Box>}
-    {viewTasks&&<Box bg="black" h="100vh">
-        <Heading color="white">Tasks</Heading>
+    {viewTasks&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" >
+          <Heading color="white">Tasks</Heading>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
         {tasks.map((task) => (
             <TaskAdmin task={task} onStatusChange={updateTaskStatus} key={task.id} onHoursChange={updateTaskHours_requested}/>
-        ))}
+        ))}</Box>
     </Box>}
-    {viewEmployees&&<Box bg="black" h="100vh">
-      <Heading color='white'>All Employees in Project</Heading>
+    {viewEmployees&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" >
+          <Heading color="white">All Employees in Project</Heading>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
       {profiles.map((profile)=>(
         <ProfileView profile={profile} onRoleChange={updateRole} key={profile.username}/>
-      ))}
+      ))}</Box>
     </Box>}
     </Box>
   )

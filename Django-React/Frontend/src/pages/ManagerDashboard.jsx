@@ -22,11 +22,16 @@ function ManagerDashboard() {
     const [viewEmployees, setViewEmployees]=useState(false);
     const [notif,setNotif]=useState([]);
     const [err,setError]=useState("");
+    const [viewAcceptedApplications, setViewAcceptedApplications]=useState(false);
+    const [viewRejectedApplications, setViewRejectedApplications]=useState(false);
+    const [viewPendingApplications, setViewPendingApplications]=useState(true);
     function Logout(){
         localStorage.clear()
         navigate("/login")
       }
-    const [notes, setNotes] = useState([]);
+    const [notesPending, setNotesPending] = useState([]);
+    const [notesAccepted, setNotesAccepted] = useState([]);
+    const [notesRejected, setNotesRejected] = useState([]);
     const [tasks,setTasks]=useState([])
     const getProfiles=()=>{
       api.get("/api/get/allprofiles/")
@@ -36,6 +41,21 @@ function ManagerDashboard() {
           console.log(data);
         })
         .catch((err)=>alert(err));
+    }
+    const onAcceptedClick=()=>{
+      setViewAcceptedApplications(true);
+      setViewPendingApplications(false);
+      setViewRejectedApplications(false);
+    }
+    const onRejectedClick=()=>{
+      setViewAcceptedApplications(false);
+      setViewPendingApplications(false);
+      setViewRejectedApplications(true);
+    }
+    const onPendingClick=()=>{
+      setViewAcceptedApplications(false);
+      setViewPendingApplications(true);
+      setViewRejectedApplications(false);
     }
     const onDashboardClick=()=>{
       setViewDashboard(true);
@@ -70,13 +90,33 @@ function ManagerDashboard() {
             })
             .catch((err) => alert(err));
     };
-    const getNotes = () => {
+    const getNotesPending = () => {
         
         api
-            .get("/api/notes_manager/")
+            .get("/api/notes_manager_pending/")
             .then((res) => res.data)
             .then((data) => {
-                setNotes(data);
+                setNotesPending(data);
+                console.log(data);
+            })
+            .catch((err) => alert(err));
+    };
+    const getNotesAccepted = () => {
+        api
+            .get("/api/notes_manager_accepted/")
+            .then((res) => res.data)
+            .then((data) => {
+                setNotesAccepted(data);
+                console.log(data);
+            })
+            .catch((err) => alert(err));
+    };
+  const getNotesRejected = () => {
+        api
+            .get("/api/notes_manager_rejected/")
+            .then((res) => res.data)
+            .then((data) => {
+                setNotesRejected(data);
                 console.log(data);
             })
             .catch((err) => alert(err));
@@ -155,7 +195,9 @@ function ManagerDashboard() {
       });
     }
     useEffect(() => {
-        getNotes();
+        getNotesPending();
+        getNotesAccepted();
+        getNotesRejected();
         getTasks();
         getProfiles();
         getNotifications();
@@ -191,13 +233,12 @@ function ManagerDashboard() {
             .catch((err) => alert("Failed to update status."));
     }
   return (
-    <Box>
+    <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
       <Sidebar isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
         onApplicationsClick={onApplicationsClick}
         onTasksClick={onTasksClick} 
         onEmployeesClick={onEmployeesClick}/>
-      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky"
-        top="0" bg="gray.800">
+      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" bg="gray.800">
         <IconButton
           aria-label="Toggle Sidebar"
           icon={<HamburgerIcon boxSize={0} />}
@@ -208,7 +249,7 @@ function ManagerDashboard() {
           <Image src="https://beesheetsv2.beehyv.com/assets/images/logo.png" alt="Logo" />
         </span>
         <HStack>
-        <Popover>
+        <Popover zIndex="999">
             <PopoverTrigger>
               <IconButton
                 aria-label="Notifications"
@@ -218,15 +259,15 @@ function ManagerDashboard() {
                 colorScheme="teal"
               />
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent zIndex="999">
               <PopoverArrow />
               <PopoverCloseButton />
               <PopoverHeader>Notifications</PopoverHeader>
-              <PopoverBody >
+              <PopoverBody zIndex="999">
                 {notif.length > 0 ? (
-                  <VStack align="start">
+                  <VStack align="start" zIndex="999">
                     {notif.map((notification, index) => (
-                      <Box key={index} p={2} borderWidth={1} borderRadius="md" w="100%" >
+                      <Box key={index} p={2} borderWidth={1} borderRadius="md" w="100%" zIndex="999">
                         <Text color="black"><strong>Message:</strong> {notification.message}</Text>
                         <Text color="black"><strong>Status:</strong> {notification.status}</Text>
                         <Button onClick={()=>notifmarkasread(notification.id,"Read")}>Mark as Read</Button>
@@ -270,7 +311,7 @@ function ManagerDashboard() {
         </ModalContent>
       </Modal>
   {viewDashboard && (
-    <Box bg="Black">
+    <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
       <Flex
       alignItems="center"
       justifyContent="center"
@@ -290,23 +331,42 @@ function ManagerDashboard() {
     </Box>
   )}
 
-     {viewApplications&& <Box bg="black" h="100vh">
-        <Heading color="white">Applications</Heading>
-        {notes.map((note) => (
+     {viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
+          <Heading color="white">Applications</Heading>
+        </Box>
+        <Box display="flex" justifyContent="center" marginTop="10px">
+          <Button marginRight="20px" onClick={onAcceptedClick}>Accepted</Button>
+          <Button marginRight="20px" onClick={onRejectedClick}>Rejected</Button>
+          <Button onClick={onPendingClick} zIndex="0" >Pending</Button>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
+        {viewPendingApplications && notesPending.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
+        {viewAcceptedApplications && notesAccepted.map((note) => (
+            <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
+        ))}
+        {viewRejectedApplications && notesRejected.map((note) => (
+            <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
+        ))}
+        </Box>
+        
     </Box>}
-    {viewTasks&&<Box bg="black" h="100vh">
-        <Heading color="white">Tasks</Heading>
+    {viewTasks&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
+          <Heading color="white">Tasks</Heading>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
         {tasks.map((task) => (
             <TaskManager task={task} onStatusChange={updateTaskStatus} key={task.id} onHoursChange={updateTaskHours_requested}/>
-        ))}
+        ))}</Box>
     </Box>}
-    {viewEmployees&&<Box bg="black" h="100vh">
-      <Heading color='white'>All Employees in Project</Heading>
+    {viewEmployees&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
+          <Heading color="white">Employees</Heading>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
       {profiles.map((profile)=>(
         <ProfileView profile={profile} onRoleChange={updateRole} key={profile.username}/>
-      ))}
+      ))}</Box>
     </Box>}
     </Box>
   )

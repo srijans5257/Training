@@ -66,9 +66,11 @@ function WfhTaskAddition() {
         navigate("/")
     }
     return (
-        <Box bg="black" h="100vh">
-            <Heading color="white">Task for {selectedDate}</Heading>
-            {!isTaskLoaded?(<form onSubmit={handleSubmit}>
+        <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h="100vh">
+            <Box display="flex" justifyContent="center">
+                <Heading color="white">Task for {selectedDate}</Heading>
+            </Box>
+            {!isTaskLoaded?(<Box ><form onSubmit={handleSubmit}>
                 <div>
                     <label>Tasks Completed</label>
                     <input
@@ -87,8 +89,16 @@ function WfhTaskAddition() {
                         required
                     />
                 </div>
-                <Button type="submit">Submit</Button>
-            </form>):(
+                <Box display="flex" justifyContent="Center">
+                    <Button type="submit">Submit</Button>
+                </Box>
+            </form>
+            <br/>
+            <Box display="flex" justifyContent="center">
+                <Button onClick={redirecthome}>Back to Home Page</Button>
+            </Box>
+            </Box>
+            ):(
                 <>
                     <div>
                         <Heading color="white">Task for Note {noteId}</Heading>

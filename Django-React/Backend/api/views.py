@@ -24,7 +24,7 @@ class NoteListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
-class NoteListCreateManager(generics.ListCreateAPIView):
+class NoteListCreateManagerPending(generics.ListCreateAPIView):
     serializer_class=NoteSerializer
     permission_classes=[IsAuthenticated]
 
@@ -32,10 +32,31 @@ class NoteListCreateManager(generics.ListCreateAPIView):
         user=self.request.user
         try:
             project = user.profile.project
-            return Note.objects.filter(author__profile__project=project)
+            return Note.objects.filter(author__profile__project=project,status="pending")
         except Profile.DoesNotExist:
             return Note.objects.none()
+class NoteListCreateManagerAccepted(generics.ListCreateAPIView):
+    serializer_class=NoteSerializer
+    permission_classes=[IsAuthenticated]
 
+    def get_queryset(self):
+        user=self.request.user
+        try:
+            project = user.profile.project
+            return Note.objects.filter(author__profile__project=project,status="accepted")
+        except Profile.DoesNotExist:
+            return Note.objects.none()
+class NoteListCreateManagerRejected(generics.ListCreateAPIView):
+    serializer_class=NoteSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        user=self.request.user
+        try:
+            project = user.profile.project
+            return Note.objects.filter(author__profile__project=project,status="rejected")
+        except Profile.DoesNotExist:
+            return Note.objects.none()
 class NoteStatusUpdate(generics.UpdateAPIView):
     queryset=Note.objects.all()
     serializer_class=NoteSerializer

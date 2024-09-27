@@ -4,7 +4,7 @@ import Note from "../components/Note";
 import "../styles/Home.css";
 import SidebarHome from "../components/SidebarHome"
 import { useNavigate } from "react-router-dom";
-import { Popover,PopoverTrigger,PopoverContent,PopoverArrow,PopoverCloseButton,PopoverHeader,PopoverBody,VStack,Flex,Box, Heading, Menu, MenuButton, MenuList, MenuItem, Avatar, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, Text, Image, HStack,Button } from "@chakra-ui/react";
+import {Popover,PopoverTrigger,PopoverContent,PopoverArrow,PopoverCloseButton,PopoverHeader,PopoverBody,VStack,Flex,Box, Heading, Menu, MenuButton, MenuList, MenuItem, Avatar, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, Text, Image, HStack,Button } from "@chakra-ui/react";
 import { BellIcon,HamburgerIcon } from "@chakra-ui/icons";
 function Home() {
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ function Home() {
         from_date,
         to_date,
       });
-      alert("Note created successfully");
+      alert("Application created successfully");
       createNotification({
         project: profiledata.project_name,  // Example project ID
         to: "managers",  // The user receiving the notification
@@ -133,8 +133,8 @@ function Home() {
           .catch((err) => alert("Failed to update status."));
   }
   return (
-    <Box bg="black">
-      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky" top="0" zIndex="2000">
+    <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h="100vh">
+      <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky" top="0" zIndex="2000" bg="gray.800">
       <SidebarHome isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
         onApplicationsClick={onApplicationsClick}
         onApplicationCreationClick={onApplicationsCreationClick}/>
@@ -205,7 +205,7 @@ function Home() {
         </ModalContent>
       </Modal>
       {viewDashboard && (
-        <Box bg="Black">
+        <Box>
           <Flex
           alignItems="center"
           justifyContent="center"
@@ -224,14 +224,20 @@ function Home() {
         </Flex>
         </Box>
       )}
-      {viewApplications&&<Box bg="black" h="100vh">
-        <Heading color="white">Applications</Heading>
-        {notes.map((note) => (
-          <Note note={note} onDelete={deleteNote} key={note.id} />
-        ))}
+      {viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
+          <Heading color="white">Applications</Heading>
+        </Box>
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
+          {notes.map((note) => (
+            <Note note={note} onDelete={deleteNote} key={note.id}/>
+          ))}
+        </Box>
       </Box>}
-      {viewApplicationsCreation&&<Box bg="black" h="100vh">
-        <Heading color="white">Create an Application</Heading>
+      {viewApplicationsCreation&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
+        <Box display="flex" justifyContent="center" marginTop="40px">
+          <Heading color="white">Create an Application</Heading>
+        </Box>
+        
         <form onSubmit={createNote} className="application-creation">
           <label htmlFor="reason">Reason:</label>
           <br />
