@@ -151,18 +151,32 @@ function ManagerDashboard() {
           console.error('Error creating notification:', error);
         });
     };
-    const updateNoteStatus = (noteAuthor,noteId, newStatus) => {
-        api
+    const updateNoteStatus = async(noteAuthor,noteId, newStatus) => {
+        await api
             .patch(`/api/notes/${noteId}/`, { status: newStatus })  // Call the API to update the note status
             .then(() => {
                 // Update the note status in the state
-                setNotes((prevNotes) =>
+                if(newStatus==="accepted")
+                {setNotesAccepted((prevNotes) =>
+                    prevNotes.map((note) =>
+                        note.id === noteId ? { ...note, status: newStatus } : note
+                    )
+                );}
+                else if(newStatus==="rejected"){
+                  setNotesRejected((prevNotes) =>
                     prevNotes.map((note) =>
                         note.id === noteId ? { ...note, status: newStatus } : note
                     )
                 );
+                }
+                else{
+                  setNotesPending((prevNotes) =>
+                    prevNotes.map((note) =>
+                        note.id === noteId ? { ...note, status: newStatus } : note
+                    )
+                );
+                }
             })
-            .catch((err) => alert("Failed to update status."));
             createNotification({
               project: profiledata.project_name,  // Example project ID
               to: noteAuthor,  // The user receiving the notification
@@ -170,6 +184,9 @@ function ManagerDashboard() {
               status: 'Unread',  // Notification status
               message: `Application ${newStatus} by ${username}!`,  // Custom message
             });
+            getNotesAccepted()
+            getNotesPending()
+            getNotesRejected()
     };
     const updateTaskStatus = (taskAuthor,taskId, newStatus) => {
         api
@@ -428,21 +445,23 @@ function ManagerDashboard() {
   )}
 
      {viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
-          <Heading color="white">Applications</Heading>
+          {viewPendingApplications&&<Heading color="white">Pending Applications</Heading>}
+          {viewAcceptedApplications&&<Heading color="white">Accepted Applications</Heading>}
+          {viewRejectedApplications&&<Heading color="white">Rejected Applications</Heading>}
         </Box>
-        {/* <Box display="flex" justifyContent="center" marginTop="10px">
+        <Box display="flex" justifyContent="center" marginTop="10px">
           <Button marginRight="20px" onClick={onAcceptedClick}>Accepted</Button>
           <Button marginRight="20px" onClick={onRejectedClick}>Rejected</Button>
           <Button onClick={onPendingClick} zIndex="0" >Pending</Button>
-        </Box> */}
+        </Box>
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
-        {notesPending.map((note) => (
+        {viewPendingApplications&&notesPending.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
-        {notesAccepted.map((note) => (
+        {viewAcceptedApplications&& notesAccepted.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
-        {notesRejected.map((note) => (
+        {viewRejectedApplications&&notesRejected.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
         </Box>

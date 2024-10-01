@@ -161,11 +161,29 @@ function ManagerDashboard() {
             .patch(`/api/notes/${noteId}/`, { status: newStatus })  // Call the API to update the note status
             .then(() => {
                 // Update the note status in the state
-                setNotes((prevNotes) =>
-                    prevNotes.map((note) =>
-                        note.id === noteId ? { ...note, status: newStatus } : note
-                    )
-                );
+                if(newStatus==="accepted")
+                  {setNotesAccepted((prevNotes) =>
+                      prevNotes.map((note) =>
+                          note.id === noteId ? { ...note, status: newStatus } : note
+                      )
+                  );}
+                  else if(newStatus==="rejected"){
+                    setNotesRejected((prevNotes) =>
+                      prevNotes.map((note) =>
+                          note.id === noteId ? { ...note, status: newStatus } : note
+                      )
+                  );
+                  }
+                  else{
+                    setNotesPending((prevNotes) =>
+                      prevNotes.map((note) =>
+                          note.id === noteId ? { ...note, status: newStatus } : note
+                      )
+                  );
+                  }
+                  getNotesAccepted()
+                  getNotesPending()
+                  getNotesRejected()
             })
             .catch((err) => alert("Failed to update status."));
             createNotification({
@@ -440,7 +458,9 @@ function ManagerDashboard() {
   )}
 
 {viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
-          <Heading color="white">Applications</Heading>
+  {viewPendingApplications&&<Heading color="white">Pending Applications</Heading>}
+  {viewAcceptedApplications&&<Heading color="white">Accepted Applications</Heading>}
+  {viewRejectedApplications&&<Heading color="white">Rejected Applications</Heading>}
         </Box>
         <Box display="flex" justifyContent="center" marginTop="10px">
           <Button marginRight="20px" onClick={onAcceptedClick}>Accepted</Button>
