@@ -41,6 +41,10 @@ class Profile(models.Model):
         ('admin','Admin'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    firstname=models.CharField(max_length=255,blank=True,null=True)
+    lastname=models.CharField(max_length=255,blank=True,null=True)
+    email=models.EmailField(blank=True,null=True)
+    phone=models.IntegerField(blank=True,null=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
     def __str__(self):

@@ -155,7 +155,25 @@ class UserProfileView2(generics.RetrieveAPIView):
             return Response({"error": "User not found"}, status=404)
         except Profile.DoesNotExist:
             return Response({"error": "Profile not found"}, status=404)
+
+class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
+    queryset=Profile.objects.all()
+    serializer_class=ProfileSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_object(self):
+        username = self.kwargs['username']
+        return Profile.objects.get(user__username=username)
+
+    def put(self, request, *args, **kwargs):
+        profile = self.get_object()
+        serializer = ProfileSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+
 class TaskView(generics.ListAPIView):
     serializer_class=TaskViewSerializer
     permission_classes=[IsAuthenticated]

@@ -67,7 +67,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['username', 'role', 'project_name']
+        fields = ['username', 'role', 'project_name','firstname','lastname','email','phone']
 
 class NotificationSerializer(serializers.ModelSerializer):
     project_name = serializers.CharField(source='project.name', read_only=True)  # Serialize the project name

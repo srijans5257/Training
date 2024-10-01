@@ -11,6 +11,7 @@ urlpatterns=[
     path("taskaddition/<int:note_id>/<str:date>/",views.TaskCreateView.as_view(),name="task-addition"),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task-detail'),
     path('profile/<str:username>/', views.UserProfileView2.as_view(), name='user-profile'),
+    path('update-profile/<str:username>/', views.UpdateUserProfileView.as_view(), name='update-user-profile'),
     path('tasks/',views.TaskView.as_view(),name='TaskView'),
     path('get/allprofiles/',views.ProfileManagerView.as_view(),name="getallprofiles"),
     path('get/allprofilesadmin/',views.ProfileAdminView.as_view(),name="getallprofiles"),

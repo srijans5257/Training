@@ -9,6 +9,8 @@ import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
 import WfhTaskAddition from "./pages/WfhTaskAddition"
 import { ChakraProvider } from '@chakra-ui/react'
+import { useState,useEffect } from "react"
+import api from "./api"
 function Logout(){
   localStorage.clear()
   return <Navigate to="/login"/>
@@ -18,16 +20,27 @@ function RegisterAndLogout(){
   return <Register />
 }
 function App() {
-
+  const username = localStorage.getItem('username');
+  const [profiledata, setProfiledata] = useState(null);
+  useEffect(() => {
+    if (username) {
+      api.get(`/api/profile/${username}/`)
+        .then(response => setProfiledata(response.data))
+        .catch(err => setError('Error fetching profile data'));
+    }
+  }, [username]);
   return (
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={
-            <ProtectedRoute>
-              <Home></Home>
-            </ProtectedRoute>
-          }/>
+        <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home/>
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={
             <Login />
           }/>

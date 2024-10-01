@@ -6,7 +6,7 @@ import TaskManager from '../components/TaskManager';
 import ProfileView from '../components/ProfileView';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button,Popover,PopoverTrigger,PopoverContent,PopoverArrow,PopoverCloseButton,PopoverHeader,PopoverBody,VStack,Flex,Box, Heading, Menu, MenuButton, MenuList, MenuItem, Avatar, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, Text, Image, HStack } from "@chakra-ui/react";
+import { Input,Button,Popover,PopoverTrigger,PopoverContent,PopoverArrow,PopoverCloseButton,PopoverHeader,PopoverBody,VStack,Flex,Box, Heading, Menu, MenuButton, MenuList, MenuItem, Avatar, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, Text, Image, HStack } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { BellIcon } from '@chakra-ui/icons';
 function ManagerDashboard() {
@@ -25,6 +25,8 @@ function ManagerDashboard() {
     const [viewAcceptedApplications, setViewAcceptedApplications]=useState(false);
     const [viewRejectedApplications, setViewRejectedApplications]=useState(false);
     const [viewPendingApplications, setViewPendingApplications]=useState(true);
+    const [editMode, setEditMode] = useState(false);
+    const [updatedData, setUpdatedData] = useState({});
     function Logout(){
         localStorage.clear()
         navigate("/login")
@@ -33,6 +35,20 @@ function ManagerDashboard() {
     const [notesAccepted, setNotesAccepted] = useState([]);
     const [notesRejected, setNotesRejected] = useState([]);
     const [tasks,setTasks]=useState([])
+    const fetchUser = async () => {
+      if (username) {
+        try {
+          const response = await api.get(`/api/profile/${username}/`);
+          setProfiledata(response.data);
+          setUpdatedData(response.data)
+          if (response.data.role === "employee") {
+            navigate("/");
+          }
+        } catch (err) {
+          setError("Error fetching profile data");
+        }
+      }
+    };
     const getProfiles=()=>{
       api.get("/api/get/allprofiles/")
       .then((res)=>res.data)
@@ -200,6 +216,7 @@ function ManagerDashboard() {
         getNotesRejected();
         getTasks();
         getProfiles();
+        fetchUser();
         getNotifications();
     }, []);
     useEffect(() => {
@@ -231,7 +248,29 @@ function ManagerDashboard() {
                 );
             })
             .catch((err) => alert("Failed to update status."));
-    }
+    };
+    const handleEditClick = () => {
+      setEditMode(!editMode);
+    };
+  
+    const handleChange = (event) => {
+      setUpdatedData({ ...updatedData, [event.target.name]: event.target.value });
+    };
+  
+    const handleSave = async () => {
+      // Make the API call with updated data (replace with your actual API call)
+      const response = await api.put(`/api/update-profile/${username}/`, updatedData);
+  
+      if (response) {
+        // Update profile data and close modal on successful update
+        setProfiledata(updatedData);
+        setEditMode(!editMode);
+        onClose();
+      } else {
+        // Handle API call errors (optional)
+        console.error('Error updating profile:', response.statusText);
+      }
+    };
   return (
     <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
       <Sidebar isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
@@ -293,23 +332,80 @@ function ManagerDashboard() {
       
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Profile</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody >
-            {profiledata ? (
-              <Box color="black">
-                <Text color="black"><strong>Username:</strong> {profiledata.username}</Text>
-                <Text color="black"><strong>Role:</strong> {profiledata.role}</Text>
-                <Text color="black"><strong>Project:</strong> {profiledata.project_name}</Text>
-              </Box>
-            ) : (
-              <Text color="black">Loading profile data...</Text>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Profile</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          {profiledata  
+ ? (
+            <Box color="black">
+              <Text color="black">
+                <strong>Username:</strong> {profiledata.username}
+              </Text>
+              {editMode ? (
+                <>
+                  <Input
+                    name="firstname"
+                    value={updatedData.firstname}
+                    onChange={handleChange}
+                    placeholder="First Name"
+                    mb={2}
+                  />
+                  <Input
+                    name="lastname"
+                    value={updatedData.lastname}
+                    onChange={handleChange}
+                    placeholder="Last Name"
+                    mb={2}
+                  />
+                  <Input
+                    name="email"
+                    value={updatedData.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    mb={2}
+                  />
+                  <Input
+                    name="phone"
+                    value={updatedData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone No"
+                    mb={2}
+                  />
+                </>
+              ) : (
+                <>
+                  <Text color="black">
+                    <strong>First Name:</strong> {profiledata.firstname || "N/A"}
+                  </Text>
+                  <Text color="black">
+                    <strong>Last Name:</strong> {profiledata.lastname || "N/A"}
+                  </Text>
+                  <Text color="black">
+                    <strong>Email:</strong> {profiledata.email || "N/A"}
+                  </Text>
+                  <Text color="black">
+                    <strong>Phone No:</strong> {profiledata.phone || "N/A"}
+                  </Text>
+                </>
+              )}
+              <Text color="black">
+                <strong>Role:</strong> {profiledata.role}
+              </Text>
+              <Text color="black">
+                <strong>Project:</strong> {profiledata.project_name}
+              </Text>
+              <Button bg="black" color="white" onClick={editMode ? handleSave : handleEditClick}>
+                {editMode ? 'Save' : 'Add/Edit Details'}
+              </Button>
+            </Box>
+          ) : (
+            <Text color="black">Loading profile data...</Text>
+          )}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   {viewDashboard && (
     <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'>
       <Flex
