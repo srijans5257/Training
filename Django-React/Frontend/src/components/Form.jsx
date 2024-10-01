@@ -88,7 +88,7 @@ function Form({ route, method }) {
                     duration: 9000,
                     isClosable: true,
                   })
-                navigate("/login");
+                navigate("/admindashboard");
             }
         } catch (error) {
             alert(error);

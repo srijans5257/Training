@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import {Input, Button,Popover,PopoverTrigger,PopoverContent,PopoverArrow,PopoverCloseButton,PopoverHeader,PopoverBody,VStack,Flex,Box, Heading, Menu, MenuButton, MenuList, MenuItem, Avatar, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure, Text, Image, HStack } from "@chakra-ui/react";
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { BellIcon } from '@chakra-ui/icons';
+import SidebarAdmin from '../components/SidebarAdmin';
 function ManagerDashboard() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [profiledata, setProfiledata] = useState({}); 
@@ -83,6 +84,9 @@ function ManagerDashboard() {
       setViewApplications(false);
       setViewTasks(false);
       setViewDashboard(false);
+    }
+    const onRegisterClick=()=>{
+      navigate('/register')
     }
     const fetchUser = async () => {
       if (username) {
@@ -263,7 +267,6 @@ function ManagerDashboard() {
 
       setUpdatedData({ ...updatedData, [name]: updatedValue });
     };
-  
     const handleSave = async () => {
       // Make the API call with updated data (replace with your actual API call)
       const response = await api.put(`/api/update-profile/${username}/`, updatedData);
@@ -280,10 +283,11 @@ function ManagerDashboard() {
     };
   return (
     <Box>
-      <Sidebar isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
+      <SidebarAdmin isOpen={isSidebarOpen} onDashboardClick={onDashboardClick}
         onApplicationsClick={onApplicationsClick}
         onTasksClick={onTasksClick} 
-        onEmployeesClick={onEmployeesClick}/>
+        onEmployeesClick={onEmployeesClick}
+        onRegisterClick={onRegisterClick}/>
       <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky"
         top="0" bg="gray.800">
         <IconButton
@@ -469,7 +473,7 @@ function ManagerDashboard() {
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
       {profiles.map((profile)=>(
-        <ProfileView profile={profile} onRoleChange={updateRole} key={profile.username}/>
+        <ProfileView profile={profile} key={profile.username}/>
       ))}</Box>
     </Box>}
     </Box>

@@ -5,8 +5,8 @@ import { Box,Button,Image } from '@chakra-ui/react';
 import "../styles/Register.css"
 function Register() {
   const navigate=useNavigate()
-  const redirectlogin=()=>{
-    navigate("/login")
+  const redirecthome=()=>{
+    navigate("/admindashboard");
   }
   return (
     <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h="100vh" className='main'>
@@ -20,7 +20,7 @@ function Register() {
         <Form route="/api/user/register/" method="register"/> 
       </Box>
       <br/>
-      <p className='to_login'>Already a User? <Button onClick={redirectlogin} bg="#568bf1">Log In</Button></p>
+      <p className='to_login'><Button onClick={redirecthome} bg="#568bf1">Back to Dashboard</Button></p>
     </Box>
     
   );

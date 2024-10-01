@@ -430,19 +430,19 @@ function ManagerDashboard() {
      {viewApplications&&<Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'><Box display="flex" justifyContent="center" marginTop="10px">
           <Heading color="white">Applications</Heading>
         </Box>
-        <Box display="flex" justifyContent="center" marginTop="10px">
+        {/* <Box display="flex" justifyContent="center" marginTop="10px">
           <Button marginRight="20px" onClick={onAcceptedClick}>Accepted</Button>
           <Button marginRight="20px" onClick={onRejectedClick}>Rejected</Button>
           <Button onClick={onPendingClick} zIndex="0" >Pending</Button>
-        </Box>
+        </Box> */}
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
-        {viewPendingApplications && notesPending.map((note) => (
+        {notesPending.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
-        {viewAcceptedApplications && notesAccepted.map((note) => (
+        {notesAccepted.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
-        {viewRejectedApplications && notesRejected.map((note) => (
+        {notesRejected.map((note) => (
             <NoteManager note={note} onDelete={deleteNote} onStatusChange={updateNoteStatus} key={note.id} />
         ))}
         </Box>
@@ -461,7 +461,7 @@ function ManagerDashboard() {
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
       {profiles.map((profile)=>(
-        <ProfileView profile={profile} onRoleChange={updateRole} key={profile.username}/>
+        <ProfileView profile={profile} key={profile.username}/>
       ))}</Box>
     </Box>}
     </Box>

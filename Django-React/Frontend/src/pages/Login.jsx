@@ -20,7 +20,7 @@ function Login() {
       <Box display="flex" justifyContent="center" alignItems="center" h="80%">
         <Form route="/api/token/" method="login" />
       </Box>
-      <p className='to_signup'><strong>New User?</strong> <Button onClick={redirectregister} bg="#568bf1">Sign up</Button></p>
+      {/* <p className='to_signup'><strong>New User?</strong> <Button onClick={redirectregister} bg="#568bf1">Sign up</Button></p> */}
     </Box>
   )
 }
