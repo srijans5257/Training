@@ -4,7 +4,7 @@ from .models import Note,Profile,Project,Task,Notifications
 from django.core.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(write_only=True)  # Add role to serializer
+    role = serializers.CharField(write_only=True)
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), required=False)
     class Meta:
         model = User
@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(source="profile.role")  # Assuming role is in Profile model
+    role = serializers.CharField(source="profile.role") 
 
     class Meta:
         model = User
@@ -70,15 +70,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['username', 'role', 'project_name','firstname','lastname','email','phone']
 
 class NotificationSerializer(serializers.ModelSerializer):
-    project_name = serializers.CharField(source='project.name', read_only=True)  # Serialize the project name
+    project_name = serializers.CharField(source='project.name', read_only=True) 
     class Meta:
         model= Notifications
         fields=['id','project_name','to','from_manager','status','message']
 
     def create(self, validated_data):
-        # Extract the project name from the request
         project_name = self.context['request'].data.get('project')
-        project = Project.objects.get(name=project_name)  # Find the project by name
-        validated_data['project'] = project  # Assign the project object
+        project = Project.objects.get(name=project_name) 
+        validated_data['project'] = project
         
         return super().create(validated_data)

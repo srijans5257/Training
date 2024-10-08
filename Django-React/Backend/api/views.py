@@ -18,7 +18,7 @@ class NoteListCreate(generics.ListCreateAPIView):
         return Note.objects.filter(author=user)
     
     def perform_create(self, serializer):
-        print(self.request.user)
+        # print(self.request.user)
         if serializer.is_valid():
             serializer.save(author=self.request.user)
         else:
@@ -73,7 +73,6 @@ class NoteStatusUpdate(generics.UpdateAPIView):
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
         else:
-            # Return an error response if the status is invalid
             return Response({"error": "Invalid status"}, status=400)
 
 
@@ -232,20 +231,18 @@ class NotificationCreateView(generics.CreateAPIView):
     serializer_class=NotificationSerializer
     permission_classes=[IsAuthenticated]
     def create(self, request, *args, **kwargs):
-        # Assuming the frontend will pass the relevant data when the event occurs
         data = {
-            'project': request.data.get('project'),  # Assuming project ID is passed
-            'to': request.data.get('to'),  # User the notification is for
-            'from_manager': request.data.get('from_manager'),  # Manager creating the notification
-            'status': request.data.get('status', 'Unread'),  # Default to 'Unread' if not specified
-            'message': request.data.get('message', 'No message provided'),  # Default message
+            'project': request.data.get('project'), 
+            'to': request.data.get('to'),
+            'from_manager': request.data.get('from_manager'),
+            'status': request.data.get('status', 'Unread'),
+            'message': request.data.get('message', 'No message provided'), 
         }
 
         serializer = self.get_serializer(data=data,context={'request':request})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        
-        # Return the created notification details as a response
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class NotificationUpdateView(generics.UpdateAPIView):

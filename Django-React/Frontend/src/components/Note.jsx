@@ -7,8 +7,7 @@ function Note({ note, onDelete }) {
     const created_at = new Date(note.created_at);
     const from_date = new Date(note.from_date);
     const to_date = new Date(note.to_date);
-
-    // Check if the dates are valid
+    
     const isValidDate = (date) => date instanceof Date && !isNaN(date);
 
     const formattedCreatedAt = isValidDate(created_at) ? created_at.toLocaleDateString("en-US") : "Invalid Date";

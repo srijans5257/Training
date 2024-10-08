@@ -7,19 +7,18 @@ function WfhTaskAddition() {
     const { noteId } = useParams();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const selectedDate = queryParams.get("date"); // Get the selected date from the query
+    const selectedDate = queryParams.get("date");
     const [tasks_completed, setTasks_completed] = useState("");
     const [hours_requested, setHours_requested] = useState("");
-    const [task, setTask] = useState(null); // Existing task for the date, if any
+    const [task, setTask] = useState(null);
     const navigate = useNavigate();
     const [isTaskLoaded, setIsTaskLoaded] = useState(false);
     useEffect(() => {
-        // Fetch task for the selected date and note
         api.get(`/api/taskaddition/${noteId}/${selectedDate}`)
             .then(response => {
                 if (response.data.length > 0) {
                     setTask(response.data[0]);
-                    setIsTaskLoaded(true); // Assuming only one task per date
+                    setIsTaskLoaded(true); 
                 }
             })
             .catch(error => {
@@ -32,20 +31,18 @@ function WfhTaskAddition() {
         const data = { tasks_completed, hours_requested, date: selectedDate };
 
         if (!task) {
-            // If no task exists for this date, create a new task
             api.post(`/api/taskaddition/${noteId}/${selectedDate}/`, data)
                 .then(response => {
                     setTask(response.data);
-                    setIsTaskLoaded(true); // Set the new task
+                    setIsTaskLoaded(true); 
                 })
                 .catch(error => {
                     console.error("Error creating task:", error);
                 });
         } else {
-            // Update existing task
             api.put(`/api/tasks/${task.id}/`, data)
                 .then(response => {
-                    setTask(response.data); // Update task details
+                    setTask(response.data);
                 })
                 .catch(error => {
                     console.error("Error updating task:", error);
@@ -55,8 +52,8 @@ function WfhTaskAddition() {
     const handleDelete = () => {
         api.delete(`/api/tasks/${task.id}/`)
             .then(() => {
-                setTask(null);  // Reset task state
-                setIsTaskLoaded(false);  // Task no longer exists
+                setTask(null);
+                setIsTaskLoaded(false);
             })
             .catch(error => {
                 console.error("Error deleting task:", error);

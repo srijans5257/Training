@@ -18,7 +18,7 @@ function NoteAdmin({ note, onDelete ,onStatusChange}) {
                 <select
                     className="select"
                     value={note.status}
-                    onChange={(e) => onStatusChange(note.author,note.id, e.target.value)} // Trigger the status change function
+                    onChange={(e) => onStatusChange(note.author,note.id, e.target.value)}
                 >
                     <option value="pending">Pending</option>
                     <option value="accepted">Accepted</option>

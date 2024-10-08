@@ -153,9 +153,8 @@ function ManagerDashboard() {
     };
     const updateNoteStatus = async(noteAuthor,noteId, newStatus) => {
         await api
-            .patch(`/api/notes/${noteId}/`, { status: newStatus })  // Call the API to update the note status
+            .patch(`/api/notes/${noteId}/`, { status: newStatus })  
             .then(() => {
-                // Update the note status in the state
                 if(newStatus==="accepted")
                 {setNotesAccepted((prevNotes) =>
                     prevNotes.map((note) =>
@@ -178,11 +177,11 @@ function ManagerDashboard() {
                 }
             })
             createNotification({
-              project: profiledata.project_name,  // Example project ID
-              to: noteAuthor,  // The user receiving the notification
-              from_manager: username,  // The manager creating the notification
-              status: 'Unread',  // Notification status
-              message: `Application ${newStatus} by ${username}!`,  // Custom message
+              project: profiledata.project_name, 
+              to: noteAuthor, 
+              from_manager: username, 
+              status: 'Unread', 
+              message: `Application ${newStatus} by ${username}!`, 
             });
             getNotesAccepted()
             getNotesPending()
@@ -190,9 +189,9 @@ function ManagerDashboard() {
     };
     const updateTaskStatus = (taskAuthor,taskId, newStatus) => {
         api
-            .patch(`/api/tasks/${taskId}/`, { status: newStatus })  // Call the API to update the note status
+            .patch(`/api/tasks/${taskId}/`, { status: newStatus })  
             .then(() => {
-                // Update the note status in the state
+
                 setTasks((prevTasks) =>
                     prevTasks.map((task) =>
                         task.id === taskId ? { ...task, status: newStatus } : task
@@ -201,18 +200,17 @@ function ManagerDashboard() {
             })
             .catch((err) => alert("Failed to update status."));
             createNotification({
-              project: profiledata.project_name,  // Example project ID
-              to: taskAuthor,  // The user receiving the notification
-              from_manager: username,  // The manager creating the notification
-              status: 'Unread',  // Notification status
-              message: `Task ${newStatus} by ${username}!`,  // Custom message
+              project: profiledata.project_name,  
+              to: taskAuthor,  
+              from_manager: username,  
+              status: 'Unread', 
+              message: `Task ${newStatus} by ${username}!`,
             });
     };
     const updateTaskHours_requested = (taskAuthor,taskId, newHours) => {
       api
           .patch(`/api/tasks/${taskId}/`, { hours_requested:newHours })  
           .then(() => {
-              // Update the note status in the state
               setTasks((prevTasks) =>
                   prevTasks.map((task) =>
                       task.id === taskId ? { ...task, hours_requested:newHours } : task
@@ -257,13 +255,12 @@ function ManagerDashboard() {
       await api
             .patch(`/api/update/notif/${notifId}/`, { status:newStatus })  
             .then(() => {
-                // Update the note status in the state
                 setNotif((prevNotifs) =>
                     prevNotifs.map((notif) =>
                         notif.id === notifId ? { ...notif, status:newStatus } : notif
                     )
                 );
-            })
+            }).then(()=>{getNotifications();})
             .catch((err) => alert("Failed to update status."));
     };
     const handleEditClick = () => {
@@ -275,16 +272,14 @@ function ManagerDashboard() {
     };
   
     const handleSave = async () => {
-      // Make the API call with updated data (replace with your actual API call)
+
       const response = await api.put(`/api/update-profile/${username}/`, updatedData);
   
       if (response) {
-        // Update profile data and close modal on successful update
         setProfiledata(updatedData);
         setEditMode(!editMode);
         onClose();
       } else {
-        // Handle API call errors (optional)
         console.error('Error updating profile:', response.statusText);
       }
     };

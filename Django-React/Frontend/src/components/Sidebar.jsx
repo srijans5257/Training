@@ -5,14 +5,12 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 function Sidebar({onDashboardClick,onApplicationsClick,onTasksClick,onEmployeesClick}) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Function to toggle the sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
   
   return (
     <Box position="relative">
-      {/* Sidebar Toggle Button */}
       <IconButton
         aria-label="Toggle Sidebar"
         icon={<HamburgerIcon />}
@@ -23,8 +21,6 @@ function Sidebar({onDashboardClick,onApplicationsClick,onTasksClick,onEmployeesC
         left="1rem"
         zIndex="1000"
       />
-
-      {/* Sidebar */}
       {isSidebarOpen && (
         <Box
           position="fixed"
@@ -38,7 +34,6 @@ function Sidebar({onDashboardClick,onApplicationsClick,onTasksClick,onEmployeesC
           zIndex="999"
           boxShadow="lg"
         >
-          {/* Close Button inside Sidebar */}
           <IconButton
             aria-label="Close Sidebar"
             icon={<CloseIcon />}

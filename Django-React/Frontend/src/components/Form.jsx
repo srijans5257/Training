@@ -37,7 +37,7 @@ function Form({ route, method }) {
         setLoading(true);
         e.preventDefault();
         try {
-            const res = await api.post(route, { username, password, role,project });  // Send role in the request
+            const res = await api.post(route, { username, password, role,project });  
             if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
                 localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
@@ -48,11 +48,10 @@ function Form({ route, method }) {
                 });
                 const username = profileRes.data.username;
                 localStorage.setItem('username', username);
-                const userRole = profileRes.data.role;  // Fetch the user's role from profile
+                const userRole = profileRes.data.role;  
                 if (userRole === "manager") {
                     toast({
                         title: 'Login Successful',
-                        // description: "We've created your account for you.",
                         status: 'success',
                         duration: 9000,
                         isClosable: true,
@@ -62,7 +61,6 @@ function Form({ route, method }) {
                 else if (userRole === "Admin") {
                     toast({
                         title: 'Login Successful',
-                        // description: "We've created your account for you.",
                         status: 'success',
                         duration: 9000,
                         isClosable: true,
@@ -72,7 +70,6 @@ function Form({ route, method }) {
                 else {
                     toast({
                         title: 'Login Successful',
-                        // description: "We've created your account for you.",
                         status: 'success',
                         duration: 9000,
                         isClosable: true,
@@ -91,7 +88,7 @@ function Form({ route, method }) {
                 navigate("/admindashboard");
             }
         } catch (error) {
-            alert(error);
+            alert("Username already exists");
         } finally {
             setLoading(false);
         }

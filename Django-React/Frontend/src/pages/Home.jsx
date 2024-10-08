@@ -9,9 +9,9 @@ import { BellIcon,HamburgerIcon } from "@chakra-ui/icons";
 import { Navigate } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
-  const [profiledata, setProfiledata] = useState(null); // State for profile data
+  const [profiledata, setProfiledata] = useState(null);
     // const userRole = profiledata.role;
-  const { isOpen, onOpen, onClose } = useDisclosure();  // Use useDisclosure to control modal state
+  const { isOpen, onOpen, onClose } = useDisclosure(); 
   const [notes, setNotes] = useState([]);
   const [description, setDescription] = useState("");
   const [reason, setReason] = useState("");
@@ -97,11 +97,11 @@ function Home() {
       });
       alert("Application created successfully");
       createNotification({
-        project: profiledata.project_name,  // Example project ID
-        to: "managers",  // The user receiving the notification
-        from_manager: username,  // The manager creating the notification
-        status: 'Unread',  // Notification status
-        message: `Application Created by ${username}! Pending for approval.`,  // Custom message
+        project: profiledata.project_name,  
+        to: "managers", 
+        from_manager: username,  
+        status: 'Unread',  
+        message: `Application Created by ${username}! Pending for approval.`, 
       });
       setError(null);
       getNotes();
@@ -140,14 +140,15 @@ function Home() {
     await api
           .patch(`/api/update/notif/${notifId}/`, { status:newStatus })  
           .then(() => {
-              // Update the note status in the state
               setNotif((prevNotifs) =>
                   prevNotifs.map((notif) =>
                       notif.id === notifId ? { ...notif, status:newStatus } : notif
                   )
               );
-          })
+              
+          }).then(()=>{getNotifications();})
           .catch((err) => alert("Failed to update status."));
+    
   }
   const handleEditClick = () => {
     setEditMode(!editMode);
@@ -158,16 +159,13 @@ function Home() {
   };
 
   const handleSave = async () => {
-    // Make the API call with updated data (replace with your actual API call)
     const response = await api.put(`/api/update-profile/${username}/`, updatedData);
 
     if (response) {
-      // Update profile data and close modal on successful update
       setProfiledata(updatedData);
       setEditMode(!editMode);
       onClose();
     } else {
-      // Handle API call errors (optional)
       console.error('Error updating profile:', response.statusText);
     }
   };

@@ -28,7 +28,7 @@ class Note(models.Model):
     status = models.CharField(
         max_length=10, 
         choices=STATUS_CHOICES, 
-        default=PENDING  # Default status is 'pending'
+        default=PENDING  
     )
 
     def __str__(self) -> str:
@@ -66,7 +66,7 @@ class Task(models.Model):
     status = models.CharField(
         max_length=10, 
         choices=STATUS_CHOICES, 
-        default=PENDING  # Default status is 'pending'
+        default=PENDING  
     )
     date = models.DateField(null=True,blank=True)
 

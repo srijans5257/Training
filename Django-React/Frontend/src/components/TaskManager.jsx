@@ -7,8 +7,8 @@ function TaskManager({task,onStatusChange,onHoursChange}) {
 
   const handleHoursChange = (e) => {
     const newHours = e.target.value;
-    setHoursRequested(newHours); // Update local state
-    onHoursChange(task.author, task.id, newHours); // Trigger the function to handle hours change
+    setHoursRequested(newHours);
+    onHoursChange(task.author, task.id, newHours);
   };
   return (
     <div className='note-container'>
@@ -17,7 +17,7 @@ function TaskManager({task,onStatusChange,onHoursChange}) {
       <p>Date: {task.date}</p>
       <p>
             {task.status === "pending" ? (
-                    // If the status is pending, render a dropdown
+
                     <>
                  <p>
                   Hours Requested: 
@@ -26,19 +26,18 @@ function TaskManager({task,onStatusChange,onHoursChange}) {
                     className="hours-input"
                     value={hoursRequested}
                     onChange={handleHoursChange}
-                    // Handle changes to hours_requested
+
                   />
                 </p>
                 <select
                     className="select"
                     value={task.status}
-                    onChange={(e) => onStatusChange(task.author,task.id, e.target.value)} // Trigger the status change function
+                    onChange={(e) => onStatusChange(task.author,task.id, e.target.value)} 
                 >
                     <option value="pending">Pending</option>
                     <option value="accepted">Accepted</option>
                 </select></>
                 ) : (
-                    // If the status is accepted or rejected, just display the status
                     <>
                       <p>Hours Requested: {task.hours_requested}</p>
                       <p>Status: {task.status.charAt(0).toUpperCase() + task.status.slice(1)}</p>
