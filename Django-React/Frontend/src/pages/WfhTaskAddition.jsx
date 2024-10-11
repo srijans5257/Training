@@ -33,6 +33,7 @@ function WfhTaskAddition() {
         if (!task) {
             api.post(`/api/taskaddition/${noteId}/${selectedDate}/`, data)
                 .then(response => {
+                    console.log(response.data);
                     setTask(response.data);
                     setIsTaskLoaded(true); 
                 })

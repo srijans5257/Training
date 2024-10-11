@@ -44,6 +44,9 @@ function ManagerDashboard() {
           if (response.data.role === "employee") {
             navigate("/");
           }
+          else if(response.data.role==="admin"){
+            navigate("/admindashboard")
+          }
         } catch (err) {
           setError("Error fetching profile data");
         }

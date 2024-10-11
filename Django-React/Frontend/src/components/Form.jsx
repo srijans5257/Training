@@ -87,7 +87,7 @@ function Form({ route, method }) {
                 navigate("/admindashboard");
             }
         } catch (error) {
-            alert("Invalid Username");
+            alert("Invalid Username or password");
         } finally {
             setLoading(false);
         }

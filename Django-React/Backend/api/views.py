@@ -200,18 +200,18 @@ class ProfileAdminView(generics.ListAPIView):
         project=user.profile.project
         return Profile.objects.filter(project=project).filter(Q(role="employee") | Q(role="manager"))
 
-class roleChangeView(generics.UpdateAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes=[IsAuthenticated]
+# class roleChangeView(generics.UpdateAPIView):
+#     queryset = Profile.objects.all()
+#     serializer_class = TaskSerializer
+#     permission_classes=[IsAuthenticated]
 
-    def put(self, request, *args, **kwargs):
-        task = self.get_object()
-        serializer = TaskSerializer(task, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, *args, **kwargs):
+#         task = self.get_object()
+#         serializer = TaskSerializer(task, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class NotificationEmployeeView(generics.ListAPIView):
     serializer_class=NotificationSerializer

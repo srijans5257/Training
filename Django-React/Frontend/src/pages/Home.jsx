@@ -105,6 +105,10 @@ function Home() {
         status: 'Unread',  
         message: `Application Created by ${username}! Pending for approval.`, 
       });
+      setReason("");
+      setDescription("")
+      setFrom_date("")
+      setTo_date("")
       setError(null);
       getNotes();
     } catch (error) {
@@ -171,7 +175,6 @@ function Home() {
       console.error('Error updating profile:', response.statusText);
     }
   };
-  // console.log(profiledata.role)
   return (
     <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h="100vh">
       <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" position="sticky" top="0" zIndex="1000" bg="gray.800">
@@ -326,7 +329,7 @@ function Home() {
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap="20px">
           {notes.map((note) => (
-            <Note note={note} onDelete={deleteNote} role={profiledata.role} key={note.id}/>
+            <Note note={note} onDelete={deleteNote} key={note.id}/>
           ))}
         </Box>
       </Box>}
