@@ -1,13 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "../styles/Note.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button,Box,Select } from "@chakra-ui/react";
-function Note({ note, onDelete }) {
+import api from "../api";
+function Note({ note, onDelete, role }) {
+    const [profiledata, setProfiledata] = useState(null);
+    const username = localStorage.getItem('username');
     const created_at = new Date(note.created_at);
     const from_date = new Date(note.from_date);
     const to_date = new Date(note.to_date);
-    
+    const [isemployee,setIsemployee]=useState(false)
     const isValidDate = (date) => date instanceof Date && !isNaN(date);
 
     const formattedCreatedAt = isValidDate(created_at) ? created_at.toLocaleDateString("en-US") : "Invalid Date";
@@ -15,7 +18,6 @@ function Note({ note, onDelete }) {
     const formattedToDate = isValidDate(to_date) ? to_date.toLocaleDateString("en-US") : "Invalid Date";
     const navigate=useNavigate()
     const [selectedDate, setSelectedDate] = useState("");
-
     const getDateRange = (startDate, endDate) => {
         const dateArray = [];
         let currentDate = new Date(startDate);
@@ -34,8 +36,21 @@ function Note({ note, onDelete }) {
     const clickHandler=()=>{
         navigate(`/wfhtaskaddition/${note.id}?date=${selectedDate}`)
     }
-    return (
-        <Box className="note-container">
+    const fetchUser=async()=>{
+        if (username) {
+            const response=await api.get(`/api/profile/${username}/`)
+            setProfiledata(response.data)
+            if(response.data.role==="employee"){
+                    setIsemployee(true);
+                }
+            // else if(response.data==="manager")
+      }}
+     useEffect(() => {
+       fetchUser()
+       }, [username]);
+    
+    return (<>
+        {isemployee&& <Box className="note-container">
             <p className="note-reason">Reason: {note.reason}</p>
             <p className="note-description">Description: {note.description}</p>
 
@@ -65,7 +80,8 @@ function Note({ note, onDelete }) {
                     Delete
                 </Button>
             )}
-        </Box>
+        </Box>}
+        </>
     );
 }
 

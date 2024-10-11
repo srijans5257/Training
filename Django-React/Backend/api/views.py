@@ -15,7 +15,7 @@ class NoteListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user=self.request.user
-        return Note.objects.filter(author=user)
+        return Note.objects.filter(author=user).order_by('-created_at')
     
     def perform_create(self, serializer):
         # print(self.request.user)
@@ -32,7 +32,7 @@ class NoteListCreateManagerPending(generics.ListCreateAPIView):
         user=self.request.user
         try:
             project = user.profile.project
-            return Note.objects.filter(author__profile__project=project,status="pending")
+            return Note.objects.filter(author__profile__project=project,status="pending").order_by('-created_at')
         except Profile.DoesNotExist:
             return Note.objects.none()
 class NoteListCreateManagerAccepted(generics.ListCreateAPIView):
@@ -43,7 +43,7 @@ class NoteListCreateManagerAccepted(generics.ListCreateAPIView):
         user=self.request.user
         try:
             project = user.profile.project
-            return Note.objects.filter(author__profile__project=project,status="accepted")
+            return Note.objects.filter(author__profile__project=project,status="accepted").order_by("-created_at")
         except Profile.DoesNotExist:
             return Note.objects.none()
 class NoteListCreateManagerRejected(generics.ListCreateAPIView):
@@ -54,7 +54,7 @@ class NoteListCreateManagerRejected(generics.ListCreateAPIView):
         user=self.request.user
         try:
             project = user.profile.project
-            return Note.objects.filter(author__profile__project=project,status="rejected")
+            return Note.objects.filter(author__profile__project=project,status="rejected").order_by("-created_at")
         except Profile.DoesNotExist:
             return Note.objects.none()
 class NoteStatusUpdate(generics.UpdateAPIView):
@@ -111,7 +111,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         task = self.get_object()
         serializer = TaskSerializer(task, data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -180,7 +180,7 @@ class TaskView(generics.ListAPIView):
     def get_queryset(self):
         user=self.request.user
         project = user.profile.project
-        return Task.objects.filter(note__author__profile__project=project)
+        return Task.objects.filter(note__author__profile__project=project,note__status="accepted")
     
 class ProfileManagerView(generics.ListAPIView):
     serializer_class=ProfileSerializer

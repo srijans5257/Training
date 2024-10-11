@@ -62,7 +62,7 @@ class Task(models.Model):
     ]
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='tasks')
     tasks_completed = models.TextField()
-    hours_requested=models.CharField(max_length=255, null=True,blank=True)
+    hours_requested=models.IntegerField(null=True,blank=True)
     status = models.CharField(
         max_length=10, 
         choices=STATUS_CHOICES, 
@@ -73,6 +73,12 @@ class Task(models.Model):
     def clean(self):
         if self.date < self.note.from_date or self.date > self.note.to_date:
             raise ValidationError('Date must be between the note\'s from_date and to_date.')
+        if self.hours_requested:
+            try:
+                if float(self.hours_requested) <= 0:
+                    raise ValidationError('Hours requested must be greater than 0.')
+            except ValueError:
+                raise ValidationError('Hours requested must be a valid number.')
     def __str__(self):
         return f"Task for Note: {self.note.reason} for {self.date}"
 

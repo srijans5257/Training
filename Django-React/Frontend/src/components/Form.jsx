@@ -3,8 +3,7 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css";
-import LoadingIndicator from "./LoadingIndicator";
-import { useToast,Select,Button,Heading, Input} from "@chakra-ui/react";
+import { useToast,Select,Button,Heading, Input,Spinner} from "@chakra-ui/react";
 function Form({ route, method }) {
     const toast = useToast()
     const [username, setUsername] = useState("");
@@ -88,7 +87,7 @@ function Form({ route, method }) {
                 navigate("/admindashboard");
             }
         } catch (error) {
-            alert("Username already exists");
+            alert("Invalid Username");
         } finally {
             setLoading(false);
         }
@@ -156,7 +155,7 @@ function Form({ route, method }) {
                 </>
             )}
             <br/>
-            {loading && <LoadingIndicator />}
+            {loading && <Spinner />}
             <Button className="form-button" type="submit" bg="#568bf1" color="#f5f5f5">
                 {name}
             </Button>

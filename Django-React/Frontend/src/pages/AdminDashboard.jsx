@@ -183,6 +183,7 @@ function ManagerDashboard() {
                   getNotesAccepted()
                   getNotesPending()
                   getNotesRejected()
+                  getTasks()
             })
             .catch((err) => alert("Failed to update status."));
             createNotification({
@@ -224,7 +225,7 @@ function ManagerDashboard() {
                   )
               );
           })
-          .catch((err) => alert("Failed to update status."));
+          .catch((err) => alert("Hours_requested is not valid"));
   };
     const updateRole=(username,newRole)=>{
       api.patch(`/api/update/role/${username}`,{role: newRole})
@@ -240,6 +241,8 @@ function ManagerDashboard() {
         getProfiles();
         getNotifications();
         fetchUser();
+        const notificationInterval=setInterval(getNotifications,10000);
+        return ()=>clearInterval(notificationInterval)
     }, []);
     const deleteNote = (id) => {
         api
@@ -260,7 +263,7 @@ function ManagerDashboard() {
                         notif.id === notifId ? { ...notif, status:newStatus } : notif
                     )
                 );
-            })
+            }).then(()=>getNotifications())
             .catch((err) => alert("Failed to update status."));
     }
     const handleEditClick = () => {

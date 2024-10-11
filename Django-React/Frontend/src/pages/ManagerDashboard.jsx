@@ -233,6 +233,8 @@ function ManagerDashboard() {
         getProfiles();
         fetchUser();
         getNotifications();
+        const notificationInterval=setInterval(getNotifications,10000);
+        return ()=>clearInterval(notificationInterval)
     }, []);
     useEffect(() => {
         if (username) {

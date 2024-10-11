@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { Button,Box,Image } from '@chakra-ui/react'
 import "../styles/Login.css"
 function Login() {
-  const navigate=useNavigate()
-  const redirectregister=()=>{
+  // const navigate=useNavigate()
+  // const redirectregister=()=>{
 
-    navigate("/register")
-  }
+  //   navigate("/register")
+  // }
   return (
     <Box bg="linear-gradient(to bottom right, #1d253c, #12182a)" h='100vh'className='main' color="#f5f5f5">
       <Box className="NavBar" display="flex" justifyContent="space-between" alignItems="center" bg="gray.800">

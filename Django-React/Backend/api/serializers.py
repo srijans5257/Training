@@ -54,8 +54,16 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Task
-        fields=['id','tasks_completed','hours_requested','status','date']
+        model = Task
+        fields = ['id', 'tasks_completed', 'hours_requested', 'status', 'date']
+    
+    def validate_hours_requested(self, value):
+        try:
+            if float(value) <= 0:
+                raise serializers.ValidationError("Hours requested must be greater than 0.")
+        except ValueError:
+            raise serializers.ValidationError("Hours requested must be a valid number.")
+        return value
 class TaskViewSerializer(serializers.ModelSerializer):
     author=serializers.CharField(source='note.author.username')
     class Meta:
